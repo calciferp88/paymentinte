@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
+import HmacSHA256 from "crypto-js/hmac-sha256";
 
 export default function Checkout() {
 
@@ -7,28 +8,26 @@ export default function Checkout() {
     const [ email, setEmail ] = useState('');
     const [ phone, setPhone ] = useState('');
     const [ add, setAdd ] = useState('');
+    const totalAmount = 110;
 
     const paynow = () => {
         
-        const items = [{
-            name: "Nike Air Jordan",
-            amount: 110,
-            quantity: 2
-        }]  
+        const items = `[{\"name\":\"Dinger\\'s\",\"amount\": ${totalAmount},\"quantity\":\"2\"}]`; 
 
-        const data = {     
-            clientId:"87d9eb64-9d64-35d7-b331-2833b4787770" , 
-            publicKey:"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC0FeXFG78FHY/o2ekXJJoTxbHTlhrOjteN++EoLrzbwcKq4D4LZL9j1fMl9IEhlgUEo0HIDb871K5loJ8uTEkM27kXVVjv7EPLR0UnEG7blFWfj03FjGjhjyZfPyrFRoC7QvorVRU9TX4y2GyEjgqV+9EWQYZBmOD80dkk/4KsRQIDAQAB" , 
-            items: items , 
-            customerName: "Kyaw Kyaw", 
+        const values = {     
+            clientId:"3471e87e-4959-39c2-82d8-70a9e0c1dbd1", 
+            publicKey:"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4rpGNRGNIu68oCBpts1s3A+Mo6sLuY5BAVznsrtDrdt9TOdAsWJVWfoXGKnD15IPs06fyZeJf+JoZsFiTnRcZ1TdYZVyL+xMFCWshZxt4kxfLrMpbOLm8SB4S3j8o9B9Wfsuk5D9Tf9sAMC2KShXSEXruu5sn/jwXTP6XlAiDHQIDAQAB" , 
+            items: items, 
+            customerName: fname, 
             totalAmount: 220, 
-            merchantOrderId: "0909", 
-            merchantKey: "9e01os1.iyDJia32LW0rE5KXdKfGylg77i8", 
-            projectName: "Test Shop", 
-            merchantName: "Mg Mg", 
+            merchantOrderId: "000001", 
+            merchantKey: "eb8ten1.uzDCmGF4v3ep0b5LLUcdKAnynK8z", 
+            projectName: "culturexmm", 
+            merchantName: "Ivan", 
         } 
 
         const NodeRSA = require("node-rsa");
+        const secret_key = "e2f54dd446c263995d208cd7ceb6bb10";
 
         /* encrypt public key */
                                                                                                                                                                                                                                                                                                                                                                     
@@ -39,15 +38,11 @@ export default function Checkout() {
         const publicKey = new NodeRSA();
         publicKey.importKey(pubKey, "pkcs8-public");
         publicKey.setOptions({ encryptionScheme: "pkcs1" });
-        const encryptedPayload = publicKey.encrypt(data, "base64");
+        const encryptedPayload = publicKey.encrypt(values, "base64");
         const HashValue = HmacSHA256(values, secret_key).toString();
-        setTimeout(() => {
         
-        window.location = "https://form.dinger.asia"+"?payload="+encodeURIComponent(encryptedPayload)+"&hashValue="+HashValue+"&lang="+language;
+        window.location = "https://form.dinger.asia?payload="+encodeURIComponent(encryptedPayload)+"&hashValue="+HashValue+"&lang="+"en";
         
-        }, 2000);
-            
-
     }
 
     return (
