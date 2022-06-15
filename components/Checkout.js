@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import HmacSHA256 from "crypto-js/hmac-sha256";
-import rsa from "crypto-js";
 
 
 export default function Checkout() {
